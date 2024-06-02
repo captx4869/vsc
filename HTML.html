@@ -1,0 +1,225 @@
+<html>
+<head>
+    <title>Quiz</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #FFFFFF;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100ph;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #1c1c1c;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            width: 80%;
+            max-width: 800px;
+            text-align: center;
+        }
+
+        .main-title {
+            font-size: 2.5em;
+            color: #4A90E2;
+            margin-bottom: 20px;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        .question {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            animation: fadeIn 1.5s ease-in-out;
+            color: #BBDEFB;
+        }
+
+        .answer-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+
+        .ans1 {
+            background-color: #2C3E50;
+            color: #E0F7FA;
+            border: none;
+            padding: 15px 20px;
+            margin: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            font-size: 1em;
+            text-align: center;
+            min-width: 120px;
+            animation: fadeInUp 1s ease-in-out;
+        }
+
+        .ans1:hover {
+            background-color: #3498DB;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .ans1:active {
+            background-color: #2980B9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        #next-btn {
+            background-color: #4A90E2;
+            color: #FFF;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.2em;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        #next-btn:hover {
+            background-color: #357ABD;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+    <script>
+        const questions = [
+            {
+                question: "What's '1' + '1'?",
+                answers: [
+                    { text: "1+1", correct: false },
+                    { text: "2", correct: false },
+                    { text: "0", correct: false },
+                    { text: "11", correct: true }
+                ]
+            },
+            {
+                question: "What are two things you can never eat for breakfast?",
+                answers: [
+                    { text: "Beef", correct: false },
+                    { text: "Lunch", correct: true },
+                    { text: "Cocroach", correct: false },
+                    { text: "Door", correct: false }
+                ]
+            },
+            {
+                question: "What is always coming but never arrives?",
+                answers: [
+                    { text: "Gambull Waterson", correct: false },
+                    { text: "Summer", correct: false },
+                    { text: "Tomorrow", correct: true },
+                    { text: "Isaac Newton", correct: false }
+                ]
+            },
+            {
+                question: "You spot a boat full of people but there isn’t a single person on board. How is that possible?",
+                answers: [
+                    { text: "They all died", correct: false },
+                    { text: "You are blind", correct: false },
+                    { text: "They are sleeping", correct: false },
+                    { text: "Other options...", correct: true }
+                ]
+            },
+            {
+                question: "How many rings are in our planet?",
+                answers: [
+                    { text: "Millions", correct: true },
+                    { text: "Four", correct: false },
+                    { text: "None", correct: false },
+                    { text: "It's not OUR planet.", correct: false }
+                ]
+            }
+        ];
+
+        let i = 0;
+        let sc = 0;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('next-btn').addEventListener('click', () => {
+                i++;
+                if (i < questions.length) {
+                    setNextQuestion();
+                } else {
+                    alert(`Quiz finished! Your score: ${sc}`);
+                    i = 0;
+                    sc = 0;
+                    setNextQuestion();
+                }
+            });
+
+            setNextQuestion();
+        });
+
+        function setNextQuestion() {
+            resetState();
+            showQuestion(questions[i]);
+        }
+
+        function showQuestion(question) {
+            const questionElement = document.getElementById('question');
+            questionElement.innerText = question.question;
+
+            const answerButtonsElement = document.getElementById('answer-buttons');
+            let answersHTML = '';
+            for (let j = 0; j < question.answers.length; j++) {
+                const answer = question.answers[j];
+                answersHTML += `<button class="ans1" onclick="selectAnswer(this, ${answer.correct})">${answer.text}</button>`;
+            }
+            answerButtonsElement.innerHTML = answersHTML;
+        }
+
+        function resetState() {
+            document.getElementById('answer-buttons').innerHTML = '';
+        }
+
+        function selectAnswer(button, correct){
+            const buttons = document.querySelectorAll('.ans1');
+            for (let j = 0; j < buttons.length; j++) {
+            if (questions[j].correct=="true"){
+                button[j].style.backgroundColor = '#004d40';
+                sc++;
+            }else{
+                button[j].style.backgroundColor = '#b71c1c';
+                sc=sc-1;
+            }
+            buttons[j].disabled = true;
+        }}
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1 class="main-title">QUIZ</h1>
+        <div class="question" id="question"></div>
+        <div class="answer-buttons" id="answer-buttons"></div>
+        <button id="next-btn"><span>Next</span></button>
+    </div>
+</body>
+</html>
